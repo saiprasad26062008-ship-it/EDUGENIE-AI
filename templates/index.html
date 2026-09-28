@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+>
+
+<title>
+EduGenie - AI Learning Assistant
+</title>
+
+<link
+rel="stylesheet"
+href="{{ url_for('static', path='style.css') }}"
+>
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+<header>
+
+<div class="brain">
+🧠✨
+</div>
+
+<h1>
+Welcome to EduGenie
+</h1>
+
+<p>
+Your personal AI tutor for learning support
+</p>
+
+</header>
+
+
+
+<!-- ASK QUESTION -->
+
+<section class="card">
+
+<h2>
+Ask EduGenie a Question
+</h2>
+
+
+<div class="row">
+
+<input
+id="question"
+placeholder="e.g. Which is the largest ocean?"
+>
+
+<button onclick="askQuestion()">
+Get Answer
+</button>
+
+</div>
+
+
+<div
+id="answer"
+class="result hidden"
+>
+</div>
+
+</section>
+
+
+
+<!-- EXPLANATION -->
+
+<section class="card">
+
+<h2>
+Need an Explanation?
+</h2>
+
+
+<div class="row">
+
+<input
+id="topic"
+placeholder="e.g. Quantum Computing"
+>
+
+<button onclick="explainTopic()">
+Explain
+</button>
+
+</div>
+
+
+<div
+id="explanation"
+class="result hidden"
+>
+</div>
+
+</section>
+
+
+
+<!-- SUMMARY -->
+
+<section class="card">
+
+<h2>
+Summarize a Paragraph
+</h2>
+
+
+<textarea
+id="summaryText"
+placeholder="Paste long content here to summarize..."
+></textarea>
+
+
+<button onclick="summarizeText()">
+Summarize
+</button>
+
+
+<div
+id="summary"
+class="result hidden"
+>
+</div>
+
+</section>
+
+
+
+<!-- QUIZ -->
+
+<section class="card">
+
+<h2>
+Generate a Quiz
+</h2>
+
+
+<div class="row">
+
+<input
+id="quizTopic"
+placeholder="e.g. Pythagoras theorem"
+>
+
+<button onclick="generateQuiz()">
+Generate Quiz
+</button>
+
+</div>
+
+
+<div
+id="quiz"
+class="result hidden"
+>
+</div>
+
+</section>
+
+
+
+<!-- LEARNING -->
+
+<section class="card">
+
+<h2>
+Get Learning Recommendations
+</h2>
+
+
+<div class="row">
+
+<input
+id="learningTopic"
+placeholder="e.g. SQL"
+>
+
+<button onclick="getLearning()">
+Get Recommendations
+</button>
+
+</div>
+
+
+<div
+id="learning"
+class="result hidden"
+>
+</div>
+
+</section>
+
+
+<footer>
+
+EduGenie • Google Gemini Powered Learning Assistant
+
+</footer>
+
+
+</div>
+
+
+
+<script>
+
+
+async function callAPI(
+url,
+payload
+) {
+
+const response = await fetch(
+url,
+{
+method: "POST",
+
+headers: {
+"Content-Type":
+"application/json"
+},
+
+body:
+JSON.stringify(payload)
+
+}
+);
+
+
+const data =
+await response.json();
+
+
+if (!response.ok) {
+
+throw new Error(
+data.detail ||
+"Request failed"
+);
+
+}
+
+
+return data;
+
+}
+
+
+
+function show(
+id,
+html
+) {
+
+const element =
+document.getElementById(id);
+
+element.innerHTML =
+html;
+
+element.classList.remove(
+"hidden"
+);
+
+}
+
+
+
+function escapeHtml(value) {
+
+return String(value)
+
+.replaceAll("&", "&amp;")
+
+.replaceAll("<", "&lt;")
+
+.replaceAll(">", "&gt;")
+
+.replaceAll('"', "&quot;")
+
+.replaceAll("'", "&#039;");
+
+}
+
+
+
+function formatText(value) {
+
+return escapeHtml(value)
+
+.replace(
+/\*\*(.*?)\*\*/g,
+"<strong>$1</strong>"
+)
+
+.replace(
+/\n/g,
+"<br>"
+);
+
+}
+
+
+
+async function askQuestion() {
+
+const text =
+document
+.getElementById("question")
+.value
+.trim();
+
+
+if (!text) {
+
+alert(
+"Please enter a question."
+);
+
+return;
+
+}
+
+
+show(
+"answer",
+"Thinking..."
+);
+
+
+try {
+
+const data =
+await callAPI(
+"/api/ask",
+{text}
+);
+
+
+show(
+"answer",
+
+"<h3>Answer:</h3>" +
+
+formatText(
+data.answer
+)
+
+);
+
+}
+
+catch(error) {
+
+show(
+"answer",
+"❌ " +
+escapeHtml(
+error.message
+)
+);
+
+}
+
+}
+
+
+
+async function explainTopic() {
+
+const text =
+document
+.getElementById("topic")
+.value
+.trim();
+
+
+if (!text) {
+
+alert(
+"Please enter a topic."
+);
+
+return;
+
+}
+
+
+show(
+"explanation",
+"Thinking..."
+);
+
+
+try {
+
+const data =
+await callAPI(
+"/api/explain",
+{text}
+);
+
+
+show(
+"explanation",
+
+"<h3>Explanation:</h3>" +
+
+formatText(
+data.explanation
+)
+
+);
+
+}
+
+catch(error) {
+
+show(
+"explanation",
+"❌ " +
+escapeHtml(
+error.message
+)
+);
+
+}
+
+}
+
+
+
+async function summarizeText() {
+
+const text =
+document
+.getElementById("summaryText")
+.value
+.trim();
+
+
+if (!text) {
+
+alert(
+"Please paste some content."
+);
+
+return;
+
+}
+
+
+show(
+"summary",
+"Thinking..."
+);
+
+
+try {
+
+const data =
+await callAPI(
+"/api/summarize",
+{text}
+);
+
+
+show(
+"summary",
+
+"<h3>Summary:</h3>" +
+
+formatText(
+data.summary
+)
+
+);
+
+}
+
+catch(error) {
+
+show(
+"summary",
+"❌ " +
+escapeHtml(
+error.message
+)
+);
+
+}
+
+}
+
+
+
+async function generateQuiz() {
+
+const text =
+document
+.getElementById("quizTopic")
+.value
+.trim();
+
+
+if (!text) {
+
+alert(
+"Please enter a quiz topic."
+);
+
+return;
+
+}
+
+
+show(
+"quiz",
+"Generating quiz..."
+);
+
+
+try {
+
+const data =
+await callAPI(
+"/api/quiz",
+{text}
+);
+
+
+const quiz =
+data.quiz || [];
+
+
+let html =
+"<h3>Quiz</h3>";
+
+
+quiz.forEach(
+(q, index) => {
+
+
+html += `
+
+<div class="quiz">
+
+<p>
+
+<strong>
+
+Q${index + 1}:
+${escapeHtml(q.question)}
+
+</strong>
+
+</p>
+`;
+
+
+q.options.forEach(
+(option, optionIndex) => {
+
+html += `
+
+<label>
+
+<input
+type="radio"
+name="q${index}"
+value="${optionIndex}"
+>
+
+${escapeHtml(option)}
+
+</label>
+
+`;
+
+}
+);
+
+
+html += `
+
+<button
+onclick="checkAnswer(${index})"
+>
+
+Check Answer
+
+</button>
+
+
+<div
+id="feedback${index}"
+class="feedback"
+>
+</div>
+
+</div>
+
+`;
+
+});
+
+
+show(
+"quiz",
+html
+);
+
+
+window.currentQuiz =
+quiz;
+
+}
+
+catch(error) {
+
+show(
+"quiz",
+"❌ " +
+escapeHtml(
+error.message
+)
+);
+
+}
+
+}
+
+
+
+function checkAnswer(index) {
+
+const question =
+window.currentQuiz[index];
+
+
+const selected =
+document.querySelector(
+`input[name="q${index}"]:checked`
+);
+
+
+const feedback =
+document.getElementById(
+`feedback${index}`
+);
+
+
+if (!selected) {
+
+feedback.innerHTML =
+"Please select an option.";
+
+return;
+
+}
+
+
+const selectedAnswer =
+Number(
+selected.value
+);
+
+
+if (
+selectedAnswer ===
+question.answer
+) {
+
+feedback.innerHTML =
+"✅ Correct!";
+
+feedback.className =
+"feedback correct";
+
+}
+
+else {
+
+feedback.innerHTML =
+
+"❌ Incorrect.<br>" +
+
+"Correct Answer: <strong>" +
+
+escapeHtml(
+question.options[
+question.answer
+]
+) +
+
+"</strong><br><br>" +
+
+escapeHtml(
+question.explanation
+);
+
+feedback.className =
+"feedback wrong";
+
+}
+
+}
+
+
+
+async function getLearning() {
+
+const text =
+document
+.getElementById(
+"learningTopic"
+)
+.value
+.trim();
+
+
+if (!text) {
+
+alert(
+"Please enter a topic."
+);
+
+return;
+
+}
+
+
+show(
+"learning",
+"Creating learning path..."
+);
+
+
+try {
+
+const data =
+await callAPI(
+"/api/learning",
+{text}
+);
+
+
+show(
+
+"learning",
+
+"<h3>Learning Recommendations for " +
+
+escapeHtml(text) +
+
+"</h3>" +
+
+formatText(
+data.recommendations
+)
+
+);
+
+}
+
+catch(error) {
+
+show(
+"learning",
+"❌ " +
+escapeHtml(
+error.message
+)
+);
+
+}
+
+}
+
+
+</script>
+
+
+</body>
+
+</html>

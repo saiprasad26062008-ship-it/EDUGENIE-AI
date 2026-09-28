@@ -1,0 +1,313 @@
+* {
+    box-sizing: border-box;
+}
+
+
+body {
+
+    margin: 0;
+
+    font-family:
+    Arial,
+    sans-serif;
+
+    background:
+    #f1f0f7;
+
+    color: #222;
+}
+
+
+.container {
+
+    width: 90%;
+
+    max-width: 900px;
+
+    margin:
+    30px auto;
+}
+
+
+header {
+
+    text-align: center;
+
+    padding:
+    20px;
+}
+
+
+.brain {
+
+    font-size:
+    35px;
+}
+
+
+h1 {
+
+    margin:
+    5px 0;
+
+    font-size:
+    30px;
+}
+
+
+header p {
+
+    color:
+    #666;
+}
+
+
+.card {
+
+    background:
+    #f8f7fb;
+
+    padding:
+    22px;
+
+    margin:
+    20px 0;
+
+    border-radius:
+    12px;
+
+    box-shadow:
+    0 2px 10px
+    rgba(0,0,0,0.08);
+}
+
+
+.card h2 {
+
+    text-align:
+    center;
+
+    font-size:
+    18px;
+}
+
+
+.row {
+
+    display:
+    flex;
+
+    gap:
+    8px;
+}
+
+
+input,
+textarea {
+
+    width:
+    100%;
+
+    padding:
+    12px;
+
+    border:
+    1px solid #ddd;
+
+    border-radius:
+    7px;
+
+    font-size:
+    14px;
+
+    background:
+    white;
+}
+
+
+textarea {
+
+    min-height:
+    120px;
+
+    resize:
+    vertical;
+
+    margin-bottom:
+    10px;
+}
+
+
+button {
+
+    border:
+    none;
+
+    border-radius:
+    7px;
+
+    padding:
+    11px 16px;
+
+    background:
+    #367ce6;
+
+    color:
+    white;
+
+    font-weight:
+    bold;
+
+    cursor:
+    pointer;
+
+    white-space:
+    nowrap;
+}
+
+
+button:hover {
+
+    opacity:
+    0.9;
+}
+
+
+.result {
+
+    background:
+    white;
+
+    border:
+    1px solid #ddd;
+
+    border-radius:
+    9px;
+
+    padding:
+    16px;
+
+    margin-top:
+    15px;
+
+    line-height:
+    1.6;
+
+    overflow-wrap:
+    anywhere;
+}
+
+
+.hidden {
+
+    display:
+    none;
+}
+
+
+.quiz {
+
+    background:
+    white;
+
+    border:
+    1px solid #ddd;
+
+    border-radius:
+    8px;
+
+    padding:
+    15px;
+
+    margin:
+    12px 0;
+}
+
+
+.quiz label {
+
+    display:
+    block;
+
+    padding:
+    8px;
+}
+
+
+.feedback {
+
+    margin-top:
+    10px;
+
+    padding:
+    10px;
+
+    border-radius:
+    6px;
+}
+
+
+.correct {
+
+    background:
+    #e5f7e9;
+
+    color:
+    #167332;
+}
+
+
+.wrong {
+
+    background:
+    #ffe8e8;
+
+    color:
+    #b42318;
+}
+
+
+footer {
+
+    text-align:
+    center;
+
+    padding:
+    20px;
+
+    color:
+    #666;
+}
+
+
+@media
+(max-width: 650px) {
+
+    .container {
+
+        width:
+        95%;
+    }
+
+
+    .row {
+
+        flex-direction:
+        column;
+    }
+
+
+    .row button {
+
+        width:
+        100%;
+    }
+
+
+    h1 {
+
+        font-size:
+        25px;
+    }
+
+}
